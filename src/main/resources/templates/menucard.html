@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spice Haven - Restaurant Menu</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        h1 {
+            color: #d35400;
+            margin: 0;
+        }
+        .cart-btn {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-btn:hover {
+            background-color: #d35400;
+        }
+        .cart-count {
+            background-color: #c0392b;
+            padding: 3px 8px;
+            border-radius: 50%;
+            font-size: 14px;
+        }
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .menu-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        .item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .item-details {
+            padding: 20px;
+        }
+        .item-title {
+            margin: 0 0 10px;
+            color: #2c3e50;
+            font-size: 1.4rem;
+        }
+        .item-desc {
+            color: #7f8c8d;
+            margin: 0 0 15px;
+            line-height: 1.5;
+        }
+        .item-price {
+            font-weight: bold;
+            color: #e67e22;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: #f5f5f5;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .qty-btn:hover {
+            background: #e0e0e0;
+        }
+        .quantity {
+            width: 40px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .add-to-cart:hover {
+            background-color: #2ecc71;
+        }
+        .add-to-cart:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Spice Haven - Menu</h1>
+        <button class="cart-btn" onclick="viewCart()">
+            🛒 View Cart
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </header>
+
+    <div class="menu-container">
+        <!-- Biryani -->
+        <div class="menu-item">
+            <img src="Biryani.jpg" alt="Hyderabadi Biryani" class="item-image">
+            <div class="item-details">
+                <h3 class="item-title">Hyderabadi Biryani</h3>
+                <p class="item-desc">Fragrant basmati rice cooked with tender chicken, aromatic spices, saffron, and fried onions. Served with raita.</p>
+                <span class="item-price">$12.99</span>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQuantity('biryani', -1)">-</button>
+                    <input type="number" id="biryani-qty" class="quantity" value="1" min="1">
+                    <button class="qty-btn" onclick="updateQuantity('biryani', 1)">+</button>
+                </div>
+                <button class="add-to-cart" onclick="addToCart('Hyderabadi Biryani', 12.99, 'biryani')">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Chicken 65 -->
+        <div class="menu-item">
+            <img src="chicken65.jpg" alt="Chicken 65" class="item-image">
+            <div class="item-details">
+                <h3 class="item-title">Chicken 65</h3>
+                <p class="item-desc">Spicy, deep-fried chicken chunks marinated in ginger, garlic, and a blend of fiery Indian spices. Chef's specialty.</p>
+                <span class="item-price">$8.50</span>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQuantity('chicken65', -1)">-</button>
+                    <input type="number" id="chicken65-qty" class="quantity" value="1" min="1">
+                    <button class="qty-btn" onclick="updateQuantity('chicken65', 1)">+</button>
+                </div>
+                <button class="add-to-cart" onclick="addToCart('Chicken 65', 8.50, 'chicken65')">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Noodles -->
+        <div class="menu-item">
+            <img src="noodles.jpg" alt="Hakka Noodles" class="item-image">
+            <div class="item-details">
+                <h3 class="item-title">Hakka Noodles</h3>
+                <p class="item-desc">Stir-fried noodles with fresh vegetables, soy sauce, and your choice of chicken or vegetables. Indo-Chinese favorite.</p>
+                <span class="item-price">$10.99</span>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQuantity('noodles', -1)">-</button>
+                    <input type="number" id="noodles-qty" class="quantity" value="1" min="1">
+                    <button class="qty-btn" onclick="updateQuantity('noodles', 1)">+</button>
+                </div>
+                <button class="add-to-cart" onclick="addToCart('Hakka Noodles', 10.99, 'noodles')">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Fried Rice -->
+        <div class="menu-item">
+            <img src="friedrice.jpg" alt="Egg Fried Rice" class="item-image">
+            <div class="item-details">
+                <h3 class="item-title">Egg Fried Rice</h3>
+                <p class="item-desc">Fluffy rice stir-fried with scrambled eggs, spring onions, carrots, and special sauces. Comfort food at its best.</p>
+                <span class="item-price">$9.50</span>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQuantity('friedrice', -1)">-</button>
+                    <input type="number" id="friedrice-qty" class="quantity" value="1" min="1">
+                    <button class="qty-btn" onclick="updateQuantity('friedrice', 1)">+</button>
+                </div>
+                <button class="add-to-cart" onclick="addToCart('Egg Fried Rice', 9.50, 'friedrice')">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Parota -->
+        <div class="menu-item">
+            <img src="parota.jpg" alt="Kerala Parota" class="item-image">
+            <div class="item-details">
+                <h3 class="item-title">Kerala Parota</h3>
+                <p class="item-desc">Flaky, layered flatbread served with flavorful vegetable kuruma. Perfect for soaking up delicious gravies.</p>
+                <span class="item-price">$5.99</span>
+                <div class="quantity-controls">
+                    <button class="qty-btn" onclick="updateQuantity('parota', -1)">-</button>
+                    <input type="number" id="parota-qty" class="quantity" value="1" min="1">
+                    <button class="qty-btn" onclick="updateQuantity('parota', 1)">+</button>
+                </div>
+                <button class="add-to-cart" onclick="addToCart('Kerala Parota', 5.99, 'parota')">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let cartItemCount = 0;
+
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cartItemCount;
+        }
+
+        function updateQuantity(itemId, change) {
+            const input = document.getElementById(`${itemId}-qty`);
+            let newValue = parseInt(input.value) + change;
+            if (newValue < 1) newValue = 1;
+            input.value = newValue;
+        }
+
+        function addToCart(itemName, price, itemId) {
+            const quantity = parseInt(document.getElementById(`${itemId}-qty`).value);
+            
+            // Check if item already exists in cart
+            const existingItemIndex = cart.findIndex(item => item.name === itemName);
+            
+            if (existingItemIndex !== -1) {
+                // Update quantity if item exists
+                cart[existingItemIndex].quantity += quantity;
+            } else {
+                // Add new item to cart
+                cart.push({
+                    name: itemName,
+                    price: price,
+                    quantity: quantity
+                });
+            }
+            
+            cartItemCount += quantity;
+            updateCartCount();
+            
+            // Show added notification
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = '#27ae60';
+            notification.style.color = 'white';
+            notification.style.padding = '15px 25px';
+            notification.style.borderRadius = '5px';
+            notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+            notification.style.zIndex = '1000';
+            notification.style.animation = 'fadeIn 0.3s, fadeOut 0.3s 2s forwards';
+            notification.textContent = `${quantity} × ${itemName} added to cart!`;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after animation
+            setTimeout(() => {
+                notification.remove();
+            }, 2300);
+        }
+
+        function viewCart() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            
+            let cartContent = "Your Order:\n\n";
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                cartContent += `${item.quantity} × ${item.name} - $${item.price.toFixed(2)} = $${itemTotal.toFixed(2)}\n`;
+                total += itemTotal;
+            });
+            
+            cartContent += `\nSubtotal: $${total.toFixed(2)}`;
+            
+            // In a real application, you would redirect to a proper cart page
+            // For this demo, we'll use an alert
+            alert(cartContent);
+        }
+
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
