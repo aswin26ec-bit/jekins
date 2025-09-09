@@ -2,7 +2,7 @@ package com.ece.demo1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+//ballelelakka
 @SpringBootApplication
 public class Demo1Application {
 
