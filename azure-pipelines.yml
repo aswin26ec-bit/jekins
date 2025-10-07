@@ -6,7 +6,9 @@
 trigger:
 - main
 
-pool: dead
+pool:
+  name: dead
+
 
 steps:
 - task: Maven@3
