@@ -1,10 +1,6 @@
 trigger:
 - main
 
-# Use the default Microsoft-hosted pool
-pool:
-  vmImage: 'ubuntu-latest' 
-
 steps:
 # This task simply prints a success message and executes.
 - script: |
