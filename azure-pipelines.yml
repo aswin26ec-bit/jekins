@@ -1,5 +1,3 @@
-trigger:
-- main
 
 steps:
 # This task simply prints a success message and executes.
